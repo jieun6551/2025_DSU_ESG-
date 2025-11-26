@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>RE:CAMPUS</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="loading">🌱 ESG 캠퍼스로 입장중...</div>
+
+  <!-- 헤더 영역 -->
+  <header>
+    <div id="mascot" class="mascot">🌱◕‿◕🌱</div>
+    <h1>RE:CAMPUS</h1>
+    <p class="subtitle">오늘도 ESG 한 걸음! 같이 해볼까?</p>
+  </header>
+
+
+  <!-- 페이지 영역 (탭 전환) -->
+
+  <!-- 홈(Home) -->
+<main id="homePage" class="page active">
+    
+    <section id="levelUp">
+      <p>레벨 <span id="level">1</span></p>
+      <div class="bar-bg">
+        <div class="bar-fill" id="expBar"></div>
+      </div>
+    </section>
+
+    <div id="mascotMsg">오늘도 ESG 실천해볼까? 🌱</div>
+
+    <section id="mission-today" class="card">
+      <h2>오늘의 추천 미션</h2>
+      <p id="todayProgress" class="progress-text">오늘 진행도: 0/3</p>
+      <p id="randomMission">로딩중...</p>
+      <button id="btn-random" class="btn-primary">완료하기</button>
+    </section>
+
+
+    
+
+    <section id="missions">
+      <div class="tab">
+        <button id="btn-all" class="active">전체</button>
+        <button id="btn-e">환경</button>
+        <button id="btn-s">존중</button>
+        <button id="btn-g">소통</button>
+      </div>
+
+      <ul id="missionList" class="grid cards"></ul>
+    </section>
+
+  </main>
+
+
+  <!-- 보상(Reward) -->
+  <main id="rewardPage" class="page">
+    <h2>나의 ESG 레벨</h2>
+    <p>레벨: <span id="rewardLevel">1</span></p>
+    <p>완료한 미션 수: <span id="rewardCount">0</span></p>
+
+    <h3>획득한 뱃지</h3>
+    <div class="badgeContainer" id="badges"></div>
+
+    <h3>ESG 기여도</h3>
+<canvas id="esgChart" width="200" height="200"></canvas>
+
+  </main>
+
+
+  <!-- MY History -->
+  <main id="myPage" class="page">
+    <h2>MY 히스토리</h2>
+    <ul id="historyList"></ul>
+  </main>
+  <!-- Ranking Page -->
+
+
+
+
+  <!-- 하단 네비게이션 -->
+  <nav>
+    <button id="tab-home">🏠<span>홈</span></button>
+    <button id="tab-reward">🎁<span>보상</span></button>
+    <button id="tab-my">👤<span>MY</span></button>
+  </nav>
+
+
+  <!-- 스크립트 로드 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="missions.js"></script>
+
+  <div id="levelUpEffect"></div>
+</body>
+</html>
