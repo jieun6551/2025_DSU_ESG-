@@ -292,3 +292,17 @@ function init() {
 }
 
 init();
+
+window.addEventListener("load", () => {
+  const popup = document.getElementById("noticePopup");
+  const closeBtn = document.getElementById("popupClose");
+
+  if (!localStorage.getItem("popupSeen")) {
+    popup.style.display = "flex";
+  }
+
+  closeBtn.addEventListener("click", () => {
+    popup.style.display = "none";
+    localStorage.setItem("popupSeen", "true");
+  });
+});
