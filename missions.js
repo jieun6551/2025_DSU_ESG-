@@ -1,15 +1,41 @@
 // 📌 ESG 미션 데이터
 const missions = [
-  { text: "텀블러 사용하기", category: "E" },
-  { text: "정수대에서 물 채우기", category: "E" },
-  { text: "칭찬 한 마디 하기", category: "S" },
-  { text: "학생 의견 게시판 참여하기", category: "G" },
-  { text: "계단 이용하기", category: "E" },
-  { text: "휴지 아껴쓰기", category: "S" },
-  { text: "친구와 인사 나누기", category: "S" },
-  { text: "일회용 빨대 줄이기", category: "E" },
-  { text: "학교 행사 정보 공유하기", category: "G" }
+  { text: "텀블러 사용하기", category: "E", score: 3, effect: "일회용 컵 사용량 감소" },
+  { text: "정수대에서 물 채우기", category: "E", score: 2, effect: "플라스틱 병 사용 절감" },
+  { text: "계단 이용하기", category: "E", score: 2, effect: "탄소 배출 감소" },
+  { text: "일회용 빨대 줄이기", category: "E", score: 4, effect: "플라스틱 쓰레기 감소" },
+
+  { text: "칭찬 한 마디 하기", category: "S", score: 2, effect: "긍정적 교우 문화 형성" },
+  { text: "휴지 아껴쓰기", category: "S", score: 3, effect: "자원 절약" },
+  { text: "친구와 인사 나누기", category: "S", score: 1, effect: "소통 활성화" },
+
+  { text: "학생 의견 게시판 참여하기", category: "G", score: 3, effect: "학생 자치 강화" },
+  { text: "학교 행사 정보 공유하기", category: "G", score: 2, effect: "정보 전달률 향상" }
 ];
+
+function showToast(message, type="E", emoji="🌱") {
+  const toast = document.getElementById("toast");
+
+  // 색상 클래스 초기화
+  toast.className = "toast";
+  toast.classList.add(type);
+
+  // 이모지 + 메시지 UI
+  toast.innerHTML = `<span class="emoji">${emoji}</span> ${message}`;
+
+  // 등장 애니메이션
+  toast.classList.add("show");
+
+  // 자동 사라짐
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2200);
+}
+
+
+
+
 
 // 저장 불러오기
 let points = Number(localStorage.getItem("points")) || 0;
@@ -23,11 +49,21 @@ const categoryIcon = { E: "🌿", S: "💛", G: "💬" };
 // ---------------------------------------------------------
 // 레벨/경험치
 function updateLevel() {
-  const level = Math.floor(points / 50) + 1;
-  const exp = points % 50;
+  const level = Math.floor(points / 10) + 1;
+  const exp = points % 10;
+
+  const left = 10 - exp;  // ⭐ 다음 레벨까지 남은 점수
+
+  document.getElementById("expBar").style.width = (exp * 10) + "%";
   document.getElementById("level").innerText = level;
-  document.getElementById("expBar").style.width = (exp * 2) + "%";
+
+  // ⭐ 남은 경험치 텍스트 표시
+  document.getElementById("expLeftText").innerText =
+    left === 0
+      ? "레벨업 준비 완료! ✨"
+      : `다음 레벨까지 ${left}점 남음`;
 }
+
 
 // ---------------------------------------------------------
 // 마스코트
@@ -90,14 +126,25 @@ function setRandomMission() {
 
 // ---------------------------------------------------------
 function completeMission(mission) {
-  const prevLevel = Math.floor(points / 50) + 1;
-  points += 10;
+  const prevLevel = Math.floor(points / 10) + 1;
 
-  const newLevel = Math.floor(points / 50) + 1;
+  points += mission.score;
+
+  // 카테고리 색 토스트
+  showToast(`+${mission.score}점! ${mission.text} 완료`,
+          mission.category,
+          mission.category === "E" ? "🌿" :
+          mission.category === "S" ? "💛" : "💬"
+);
+
+
+  const newLevel = Math.floor(points / 10) + 1;
   if (newLevel > prevLevel) {
     mascotReaction("levelup");
     fireLevelUpEffect();
-  } else {
+
+    // 레벨업 전용 색
+    showToast(`레벨업! ${prevLevel} → ${newLevel} 🎉`, "levelup", "⭐");
     mascotReaction("success");
   }
 
@@ -115,13 +162,14 @@ function completeMission(mission) {
 }
 
 
+
 // ⭐ 오늘 서로 다른 미션 3개가 목표!
 function completeTodayMission() {
   const doneToday = history.filter(h => h.date === today);
   const uniqueCount = new Set(doneToday.map(h => h.text)).size;
 
   if (uniqueCount >= 3) {
-    alert("오늘 목표 이미 달성 완료! 🎉");
+    showToast("오늘 목표 이미 달성 완료! 🎉");
     return;
   }
 
@@ -133,7 +181,7 @@ function completeTodayMission() {
   ).size;
 
   if (afterCount >= 3) {
-    alert("🌟 ESG 목표 달성! 완벽합니다! 🌱✨");
+    showToast("🌟 ESG 목표 달성! 완벽합니다! 🌱✨");
   }
 }
 
@@ -143,17 +191,25 @@ function loadMissions(filter="ALL") {
   const list = document.getElementById("missionList");
   list.innerHTML = "";
 
-  missions.filter(m => filter==="ALL" || m.category===filter)
+  missions
+    .filter(m => filter === "ALL" || m.category === filter)
     .forEach((m, i) => {
       const li = document.createElement("li");
+
       li.innerHTML = `
         <div class="icon">${categoryIcon[m.category]}</div>
-        <span>${m.text}</span>
+        <div style="display:flex; flex-direction:column;">
+          <span style="font-weight:700;">${m.text}</span>
+          <span style="font-size:12px; color:#666;">+${m.score}점 • ${m.effect}</span>
+        </div>
       `;
+
       li.addEventListener("click", () => completeMission(m));
       list.appendChild(li);
     });
 }
+
+
 
 // ---------------------------------------------------------
 // UI
@@ -176,7 +232,8 @@ function updateHistoryPage() {
 }
 
 function updateRewardPage() {
-  const level = Math.floor(points / 50) + 1;
+  const level = Math.floor(points / 10) + 1;
+  const exp = points % 10;
   document.getElementById("rewardLevel").innerText = level;
   document.getElementById("rewardCount").innerText = history.length;
 
@@ -276,12 +333,17 @@ function initFilterButtons() {
 }
 
 function initNavButtons() {
-  [["home","homePage"],["reward","rewardPage"],["my","myPage"]]
-  .forEach(([btn, page])=>{
+  [
+    ["home","homePage"],
+    ["reward","rewardPage"],
+    ["my","myPage"],
+    ["guide","guidePage"]
+  ].forEach(([btn, page])=> {
     document.getElementById(`tab-${btn}`)
-    .addEventListener("click", ()=>showPage(page));
+      .addEventListener("click", () => showPage(page));
   });
 }
+
 
 function setActiveFilter(id) {
   document.querySelectorAll(".tab button").forEach(btn => btn.classList.remove("active"));
