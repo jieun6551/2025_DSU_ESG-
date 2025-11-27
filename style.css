@@ -1121,3 +1121,43 @@ html, body {
     font-size: 13px;
   }
 }
+
+/* ================================
+   🎖 보상 페이지 헤더 디자인
+================================ */
+.reward-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #ffffff;
+  padding: 18px 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 24px;
+}
+
+.reward-icon {
+  font-size: 40px;
+  padding: 12px;
+  background: #fef3c7;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.reward-info h2 {
+  font-size: 20px;
+  margin: 0;
+  font-weight: 800;
+  color: #2A7C4F;
+}
+
+.reward-level {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 4px 0 2px;
+}
+
+.reward-sub {
+  font-size: 14px;
+  color: #555;
+}
