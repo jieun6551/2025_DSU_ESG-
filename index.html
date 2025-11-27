@@ -12,7 +12,7 @@
   <!-- 헤더 영역 -->
   <header>
     <div id="mascot" class="mascot" style="font-size: 24px; padding: 0 0 20px 0;">🌱◕‿◕🌱</div>
-    <img src="https://github.com/jieun6551/2025_DSU_ESG-/blob/main/RE-CAMPUS-LOGO.png?raw=true" alt="LOGO" style="width: 400px;">
+    <img src="/RE-CAMPUS-LOGO.png" alt="LOGO" style="width: 400px;">
     <p class="subtitle">오늘도 ESG 한 걸음! 같이 해볼까?</p>
   </header>
 
@@ -27,6 +27,9 @@
       <div class="bar-bg">
         <div class="bar-fill" id="expBar"></div>
       </div>
+
+      <!-- ⭐ 남은 경험치 안내 -->
+      <p id="expLeftText" class="exp-left">다음 레벨까지 10점 남음</p>
     </section>
 
     <div id="mascotMsg">오늘도 ESG 실천해볼까? 🌱</div>
@@ -77,6 +80,52 @@
   </main>
   <!-- Ranking Page -->
 
+  
+  <!-- Guide Page -->
+<main id="guidePage" class="page">
+  <h2 class="guide-title">RE:CAMPUS 가이드</h2>
+
+  <section class="guide-section">
+    <h3>🌱 RE:CAMPUS란?</h3>
+    <p>
+      RE:CAMPUS는 동서대학교 학생들이<br>
+      일상에서 쉽게 ESG를 실천할 수 있도록 만든<br>
+      <strong>ESG 미션 플랫폼</strong>입니다.
+    </p>
+  </section>
+
+  <section class="guide-section">
+    <h3>📌 ESG 미션 카테고리</h3>
+    <ul class="guide-list">
+      <li><span class="g-dot e"></span> <strong>환경(E)</strong> — 플라스틱·탄소 줄이기</li>
+      <li><span class="g-dot s"></span> <strong>존중(S)</strong> — 교우 문화 개선 & 배려 실천</li>
+      <li><span class="g-dot g"></span> <strong>소통(G)</strong> — 의견 반영·정보 공유·거버넌스 참여</li>
+    </ul>
+  </section>
+
+  <section class="guide-section">
+    <h3>📝 참여 방법</h3>
+    <ol class="guide-steps">
+      <li>미션 카테고리에서 원하는 미션을 선택합니다.</li>
+      <li>실천 후 클릭하여 완료 처리합니다.</li>
+      <li>경험치를 모아 <strong>레벨업 & 뱃지</strong>를 모아보세요!</li>
+    </ol>
+  </section>
+
+  <section class="guide-section">
+    <h3>🎁 혜택</h3>
+    <ul class="guide-list">
+      <li>ESG 실천 레벨 상승</li>
+      <li>카테고리별 뱃지 획득</li>
+      <li>나의 실천 히스토리 기록</li>
+      <li>공모전·포트폴리오 활용 가능</li>
+    </ul>
+  </section>
+
+  <p class="guide-bottom">작은 실천이 캠퍼스를 바꿉니다 🌿</p>
+</main>
+
+
 
 
 
@@ -85,7 +134,9 @@
     <button id="tab-home">🏠<span>홈</span></button>
     <button id="tab-reward">🎁<span>보상</span></button>
     <button id="tab-my">👤<span>MY</span></button>
+    <button id="tab-guide">ℹ️<span>가이드</span></button>
   </nav>
+
 
 
   <!-- 스크립트 로드 -->
@@ -108,6 +159,7 @@
   </div>
 </div>
 
+<div id="toast" class="toast"></div>
+
 </body>
 </html>
-
