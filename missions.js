@@ -89,7 +89,7 @@ function setRandomMission() {
 }
 
 // ---------------------------------------------------------
-function completeMission(index) {
+function completeMission(mission) {
   const prevLevel = Math.floor(points / 50) + 1;
   points += 10;
 
@@ -102,8 +102,8 @@ function completeMission(index) {
   }
 
   history.push({
-    text: missions[index].text,
-    category: missions[index].category,
+    text: mission.text,
+    category: mission.category,
     date: today
   });
 
@@ -113,6 +113,7 @@ function completeMission(index) {
   updatePages();
   updateTodayProgress();
 }
+
 
 // ⭐ 오늘 서로 다른 미션 3개가 목표!
 function completeTodayMission() {
@@ -149,7 +150,7 @@ function loadMissions(filter="ALL") {
         <div class="icon">${categoryIcon[m.category]}</div>
         <span>${m.text}</span>
       `;
-      li.addEventListener("click", () => completeMission(i));
+      li.addEventListener("click", () => completeMission(m));
       list.appendChild(li);
     });
 }
@@ -211,13 +212,15 @@ function updateRewardPage() {
 
 
 // ---------------------------------------------------------
-// 차트
+// ---------------------------------------------------------
+// 차트 (전체 누적 기준)
+// ---------------------------------------------------------
 let esgChart;
 function updateESGChart() {
   const ctx = document.getElementById("esgChart").getContext("2d");
 
-  const countToday = cat =>
-    history.filter(h => h.date === today && h.category === cat).length;
+  const countByCategory = cat =>
+    history.filter(h => h.category === cat).length;
 
   if (esgChart) esgChart.destroy();
   esgChart = new Chart(ctx, {
@@ -225,7 +228,11 @@ function updateESGChart() {
     data: {
       labels: ["환경🌿", "존중💛", "소통💬"],
       datasets: [{
-        data: [countToday("E"), countToday("S"), countToday("G")],
+        data: [
+          countByCategory("E"),
+          countByCategory("S"),
+          countByCategory("G")
+        ],
         backgroundColor: ["#4caf50", "#ffca28", "#64b5f6"]
       }]
     },
@@ -236,6 +243,7 @@ function updateESGChart() {
     }
   });
 }
+
 
 // ---------------------------------------------------------
 function updatePages() {
