@@ -790,3 +790,214 @@ html, body {
 @keyframes fadeIn {
   from { opacity: 0; }
 }
+
+/* ============================
+   📘 Guide Page Typography Fix
+============================ */
+
+/* 페이지 전체 패딩 */
+#guidePage {
+  padding: 0 22px;
+}
+
+/* 제목 */
+.guide-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+  color: #2A7C4F;
+}
+
+/* 섹션 카드 */
+.guide-section {
+  background: #ffffff;
+  padding: 10px 20px 20px 20px;
+  margin-bottom: 18px;
+  border-radius: 18px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.06);
+}
+
+/* 섹션 제목 */
+.guide-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #2A7C4F;
+  margin-bottom: 10px;
+}
+
+/* 본문 텍스트 */
+.guide-section p {
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0;
+  margin-left: 3px;
+  color: #333;
+}
+
+/* 리스트 기본 스타일 */
+.guide-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 6px;
+}
+
+.guide-list li {
+  font-size: 14px;
+  padding: 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #333;
+}
+
+/* 포인트 아이콘 점 */
+.g-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.g-dot.e { background: #4caf50; }
+.g-dot.s { background: #ffca28; }
+.g-dot.g { background: #64b5f6; }
+
+/* 참여 방법 - 숫자 리스트 */
+.guide-steps {
+  margin-top: 6px;
+  padding-left: 18px;
+  margin-bottom: -1px;
+}
+
+.guide-steps li {
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 4px 0;
+  color: #333;
+}
+
+/* 하단 문구 */
+.guide-bottom {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 12px;
+  font-weight: 600;
+  color: #2A7C4F;
+}
+
+/* ==============================
+   🌱 Toast Message
+============================== */
+.toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2A7C4F;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s ease, transform .4s ease;
+  z-index: 9999;
+  max-width: 80%;
+  text-align: center;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-6px);
+}
+
+/* ==============================
+   🌈 Category Toast Colors
+============================== */
+.toast.E {
+  background: #2A7C4F; /* 환경 - 초록 */
+}
+.toast.S {
+  background: #F5C045; /* 존중 - 노랑 */
+  color: #333;
+}
+.toast.G {
+  background: #64b5f6; /* 소통 - 파랑 */
+}
+.toast.levelup {
+  background: #8C54FF; /* 보라 계열 특별 효과 */
+}
+
+
+/* =========================================
+   🌈 Premium Toast Style (ESG Version)
+========================================= */
+.toast {
+  position: fixed;
+  bottom: 85px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  padding: 14px 20px;
+  min-width: 180px;
+  max-width: 80%;
+  text-align: center;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 6px 22px rgba(0,0,0,0.15);
+  backdrop-filter: blur(6px);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.25,1.4,0.36,1);
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* 토스트 등장 애니메이션 */
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 카테고리별 색상 */
+.toast.E { background: linear-gradient(135deg, #2A7C4F, #4cbf6d); }
+.toast.S { background: linear-gradient(135deg, #F5C045, #ffdd63); color: #4a3e00; }
+.toast.G { background: linear-gradient(135deg, #64b5f6, #8acbff); }
+.toast.levelup { background: linear-gradient(135deg, #8C54FF, #b28aff); }
+
+/* 이모지 */
+.toast .emoji {
+  font-size: 18px;
+}
+
+/* 모바일 대응 */
+@media (max-width: 480px) {
+  .toast {
+    font-size: 14px;
+    padding: 12px 18px;
+    border-radius: 40px;
+  }
+  .toast .emoji {
+    font-size: 17px;
+  }
+}
+
+.exp-left {
+  font-size: 13px;
+  margin-top: 6px;
+  font-weight: 600;
+  color: #2A7C4F;
+  text-align: right;
+  opacity: 0.9;
+}
