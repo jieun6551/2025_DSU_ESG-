@@ -1,17 +1,28 @@
 // 📌 ESG 미션 데이터
 const missions = [
-  { text: "텀블러 사용하기", category: "E", score: 3, effect: "일회용 컵 사용량 감소" },
-  { text: "정수대에서 물 채우기", category: "E", score: 2, effect: "플라스틱 병 사용 절감" },
-  { text: "계단 이용하기", category: "E", score: 2, effect: "탄소 배출 감소" },
-  { text: "일회용 빨대 줄이기", category: "E", score: 4, effect: "플라스틱 쓰레기 감소" },
+  { text: "텀블러 사용하기", category: "E", score: 3, effect: "일회용 컵 사용량 감소", effectValue: { cup: 1, co2: 9.9 } },
+  { text: "정수대에서 물 채우기", category: "E", score: 2, effect: "플라스틱 병 사용 절감", effectValue: { bottle: 1, co2: 18 } },
+  { text: "계단 이용하기", category: "E", score: 2, effect: "탄소 배출 감소", effectValue: { co2: 2.3 } },
+  { text: "일회용 빨대 줄이기", category: "E", score: 4, effect: "플라스틱 쓰레기 감소", effectValue: { straw: 1 } },
 
-  { text: "칭찬 한 마디 하기", category: "S", score: 2, effect: "긍정적 교우 문화 형성" },
-  { text: "휴지 아껴쓰기", category: "S", score: 3, effect: "자원 절약" },
-  { text: "친구와 인사 나누기", category: "S", score: 1, effect: "소통 활성화" },
+  { text: "칭찬 한 마디 하기", category: "S", score: 2, effect: "긍정적 교우 문화 형성", effectValue: { warmth: 1 } },
+  { text: "휴지 아껴쓰기", category: "S", score: 3, effect: "자원 절약", effectValue: { paper: 0.5 } },
+  { text: "친구와 인사 나누기", category: "S", score: 1, effect: "소통 활성화", effectValue: { warmth: 1 } },
 
-  { text: "학생 의견 게시판 참여하기", category: "G", score: 3, effect: "학생 자치 강화" },
-  { text: "학교 행사 정보 공유하기", category: "G", score: 2, effect: "정보 전달률 향상" }
+  { text: "학생 의견 게시판 참여하기", category: "G", score: 3, effect: "학생 자치 강화", effectValue: { governance: 1 } },
+  { text: "학교 행사 정보 공유하기", category: "G", score: 2, effect: "정보 전달률 향상", effectValue: { governance: 1 } }
 ];
+
+let impact = JSON.parse(localStorage.getItem("impact")) || {
+  cup: 0,
+  bottle: 0,
+  straw: 0,
+  paper: 0,
+  co2: 0,
+  warmth: 0,
+  governance: 0
+};
+
 
 function showToast(message, type="E", emoji="🌱") {
   const toast = document.getElementById("toast");
@@ -154,6 +165,14 @@ function completeMission(mission) {
     date: today
   });
 
+  // ⭐ ESG 효과 누적
+for (const key in mission.effectValue) {
+  impact[key] += mission.effectValue[key];
+}
+
+localStorage.setItem("impact", JSON.stringify(impact));
+
+
   localStorage.setItem("points", points);
   localStorage.setItem("history", JSON.stringify(history));
 
@@ -236,6 +255,15 @@ function updateRewardPage() {
   const exp = points % 10;
   document.getElementById("rewardLevel").innerText = level;
   document.getElementById("rewardCount").innerText = history.length;
+  document.getElementById("impCup").innerText = impact.cup;
+  document.getElementById("impBottle").innerText = impact.bottle;
+  document.getElementById("impStraw").innerText = impact.straw;
+  document.getElementById("impPaper").innerText = impact.paper.toFixed(1);
+  document.getElementById("impCO2").innerText = impact.co2.toFixed(1);
+  document.getElementById("impWarmth").innerText = impact.warmth;
+  document.getElementById("impGov").innerText = impact.governance;
+
+
 
   const badgeArea = document.getElementById("badges");
   badgeArea.innerHTML = "";
@@ -255,9 +283,7 @@ function updateRewardPage() {
   }
 
   // 레벨업 메달 (여러 개)
-  for (let i = 1; i < level; i++) {
-    addBadge("🏅", "medal");
-  }
+  addBadge(`🏅 LV${level}`, "medal");
 
   function addBadge(icon, type) {
     const div = document.createElement("div");
