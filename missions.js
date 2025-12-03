@@ -49,7 +49,8 @@ function showToast(message, type="E", emoji="🌱") {
 
 
 // 저장 불러오기
-let points = Number(localStorage.getItem("points")) || 0;
+let points = parseInt(localStorage.getItem("points"));
+if (isNaN(points)) points = 0;
 let history = JSON.parse(localStorage.getItem("history")) || [];
 let todayMissionIndex = Number(localStorage.getItem("todayIndex"));
 let todayDate = localStorage.getItem("todayDate");
@@ -60,8 +61,9 @@ const categoryIcon = { E: "🌿", S: "💛", G: "💬" };
 // ---------------------------------------------------------
 // 레벨/경험치
 function updateLevel() {
-  const level = Math.floor(points / 10) + 1;
-  const exp = points % 10;
+const level = isNaN(points) ? 1 : Math.floor(points / 10) + 1;
+const exp = isNaN(points) ? 0 : points % 10;
+
 
   const left = 10 - exp;  // ⭐ 다음 레벨까지 남은 점수
 
@@ -251,8 +253,9 @@ function updateHistoryPage() {
 }
 
 function updateRewardPage() {
-  const level = Math.floor(points / 10) + 1;
-  const exp = points % 10;
+  const level = isNaN(points) ? 1 : Math.floor(points / 10) + 1;
+  const exp = isNaN(points) ? 0 : points % 10;
+
   document.getElementById("rewardLevel").innerText = level;
   document.getElementById("rewardCount").innerText = history.length;
   document.getElementById("impCup").innerText = impact.cup;
