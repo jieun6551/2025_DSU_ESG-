@@ -56,6 +56,10 @@ Script 실행 순서가 Chrome·Whale과 다르게 작동하여 값이 초기화
 
 ⚠ Microsoft Edge 사용 시 경험치 반영 문제가 발생할 수 있으니 비권장
 
++
+2025-12-04 네이버 웨일(Whale) 환경에서 레벨바가 정상적으로 올라가지 않는 현상이 발생했습니다.
+해당 현상 발생 시, https://2025-dsu-esg.vercel.app/?v=2 링크로 접속하시면 정상 구동됩니다.
+v=2 링크 역시 오작동 시에는 v=(숫자변경) ex.) v=3 등의 버전을 입력 후 진입하시면 됩니다.
 
 
 ◆ NAN(숫자 아님) 표시 관련 안내
@@ -79,5 +83,6 @@ NAN이 표시될 경우 브라우저 콘솔에서 초기화 명령을 입력하�
 localStorage.removeItem("points");
 localStorage.removeItem("history");
 → 새로고침하면 레벨과 경험치가 정상 숫자로 돌아옵니다.
+
 
 (데이터 초기화 원치 않을 경우 removeItem("points") 만 사용 가능)
