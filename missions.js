@@ -488,7 +488,8 @@ function initNavButtons() {
     ["reward","rewardPage"],
     ["my","myPage"],
     ["report","reportPage"],
-    ["guide","guidePage"]
+    ["guide","guidePage"],
+    ["mbti", "mbtiPage"]
   ];
 
   mapping.forEach(([btn, page]) => {
@@ -661,3 +662,118 @@ function updateWeeklyReport() {
   }, 50); // ← DOM 렌더 후 실행됨 (핵심)
 }
 
+/* ==========================================================
+   🌈 ESG MBTI 분석 시스템 (총 48유형 완전 지원)
+========================================================== */
+
+// MBTI 16개별 이름
+const MBTI_NAMES = {
+  INTP: "아이디어 뱅커",
+  INTJ: "통찰형 전략가",
+  INFP: "순수한 실천가",
+  INFJ: "감성 큐레이터",
+
+  ENFP: "캠퍼스 비타민",
+  ENTP: "탐험가 리더",
+  ENFJ: "따뜻한 조력자",
+  ENTJ: "실천형 리더",
+
+  ISFP: "조용한 감성러",
+  ISFJ: "따뜻한 수호자",
+  ISTP: "현실형 해결사",
+  ISTJ: "꾸준한 실천러",
+
+  ESFP: "에너지 메이커",
+  ESTP: "액션 실천가",
+  ESFJ: "커뮤니티 메이커",
+  ESTJ: "정돈형 관리자"
+};
+
+// ESG 타입별 앞쪽 접두사
+const ESG_TITLE = {
+  E: "환경",
+  S: "존중",
+  G: "소통"
+};
+
+// 결과 설명 (카테고리 + MBTI 조합)
+function buildDesc(cat, mbti) {
+  const [I, N, T, J] = mbti;
+
+  const trait = {
+    I: "혼자서도 꾸준히 실천하는 은근 강한 스타일",
+    E: "친구와 함께할 때 더 빛나는 에너지 타입",
+
+    N: "새로운 미션을 잘 찾아내는 탐색가 성향",
+    S: "일상 속 루틴 실천이 강한 안정형",
+
+    T: "효율적인 실천을 좋아하는 계산형",
+    F: "감정·배려 중심의 감성 실천러",
+
+    J: "계획적으로 매일 실천하는 타입",
+    P: "유연하게 몰아서 하는 자유로운 타입"
+  };
+
+  const catExplain = {
+    E: "환경 실천 비중이 높아요! 🌿",
+    S: "친구·배려·소통의 사회적 온도가 높아요! 💛",
+    G: "참여·의견 제시·거버넌스 활동이 돋보여요! 💬"
+  };
+
+  return `${catExplain[cat]}\n${trait[I]}, ${trait[N]}\n${trait[T]}, ${trait[J]}`;
+}
+
+// 🔍 꾸준성 측정
+function isConsistent(history) {
+  return new Set(history.map(h => h.date)).size >= 5;
+}
+
+// 메인 MBTI 분석 함수
+function analyzeESGMBTI() {
+  const e = history.filter(h => h.category === "E").length;
+  const s = history.filter(h => h.category === "S").length;
+  const g = history.filter(h => h.category === "G").length;
+
+  const total = e + s + g;
+  if (total === 0) {
+    return {
+      mbti: "--",
+      name: "아직 없음",
+      desc: "ESG 실천을 시작해보면 자동 분석돼요! 🌱"
+    };
+  }
+
+  // 1) ESG 주도 타입 결정
+  let cat = "E";
+  if (s > e && s > g) cat = "S";
+  else if (g > e && g > s) cat = "G";
+
+  // 2) MBTI 네 글자 생성
+  const IE = (g > (e + s) / 2) ? "E" : "I";  // G 많으면 외향
+  const NS = new Set(history.map(h => h.text)).size > 5 ? "N" : "S";
+  const TF = e > s ? "T" : "F";
+  const JP = isConsistent(history) ? "J" : "P";
+
+  const mbti = `${IE}${NS}${TF}${JP}`;
+  const fullType = `${cat}-${mbti}`;
+
+  return {
+    mbti: fullType,
+    name: `${ESG_TITLE[cat]} ${MBTI_NAMES[mbti] || "실천가"}`,
+    desc: buildDesc(cat, mbti)
+  };
+}
+
+// 페이지 표시
+function showMBTIResult() {
+  const result = analyzeESGMBTI();
+
+  document.getElementById("mbtiResult").innerText = result.mbti;
+  document.getElementById("mbtiName").innerText = result.name;
+  document.getElementById("mbtiDesc").innerText = result.desc;
+
+  showPage("mbtiPage");
+}
+
+// 버튼 이벤트 연결
+document.getElementById("mbtiRetry").addEventListener("click", showMBTIResult);
