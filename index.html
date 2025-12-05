@@ -7,18 +7,17 @@
 </head>
 
 <body>
-  <!-- <div id="loading">🌱 ESG 캠퍼스로 입장중...</div> -->
 
+  <!-- 로딩 화면 -->
   <div id="loadingScreen">
-  <div class="loading-mascot">🌱</div>
-  <div class="loading-text" id="loadingText">ESG 데이터를 불러오는 중...</div>
-  <div class="loading-bar">
-    <div class="loading-bar-fill"></div>
+    <div class="loading-mascot">🌱</div>
+    <div class="loading-text" id="loadingText">ESG 데이터를 불러오는 중...</div>
+    <div class="loading-bar">
+      <div class="loading-bar-fill"></div>
+    </div>
   </div>
-</div>
 
-
-  <!-- 헤더 영역 -->
+  <!-- 헤더 -->
   <header>
     <div id="mascot" class="mascot" style="font-size: 24px; padding: 0 0 20px 0;">🌱◕‿◕🌱</div>
     <img src="/RE-CAMPUS-LOGO.png" alt="LOGO" style="width: 400px;">
@@ -26,18 +25,16 @@
   </header>
 
 
-  <!-- 페이지 영역 (탭 전환) -->
-
-  <!-- 홈(Home) -->
-<main id="homePage" class="page active">
+  <!-- ================================
+          HOME PAGE
+  ================================= -->
+  <main id="homePage" class="page active">
     
     <section id="levelUp">
       <p>레벨 <span id="level">1</span></p>
       <div class="bar-bg">
         <div class="bar-fill" id="expBar"></div>
       </div>
-
-      <!-- ⭐ 남은 경험치 안내 -->
       <p id="expLeftText" class="exp-left">다음 레벨까지 10점 남음</p>
     </section>
 
@@ -49,9 +46,6 @@
       <p id="randomMission">로딩중...</p>
       <button id="btn-random" class="btn-primary">완료하기</button>
     </section>
-
-
-    
 
     <section id="missions">
       <div class="tab">
@@ -67,178 +61,204 @@
   </main>
 
 
-  <!-- 보상(Reward) -->
+
+  <!-- ================================
+          REWARD PAGE
+  ================================= -->
   <main id="rewardPage" class="page">
     <div class="reward-header">
-  <div class="reward-icon">🎖</div>
-  <div class="reward-info">
-    <h2>나의 ESG 레벨</h2>
-    <p class="reward-level">LV <span id="rewardLevel">1</span></p>
-    <p class="reward-sub">완료한 미션: <span id="rewardCount">0</span>개</p>
-  </div>
-</div>
-
-<div id="badgePopup" class="popup-overlay" style="display:none;">
-  <div class="popup-box">
-    <h3 id="badgeTitle"></h3>
-    <p id="badgeDesc"></p>
-    <button id="badgeClose">닫기</button>
-  </div>
-</div>
-
+      <div class="reward-icon">🎖</div>
+      <div class="reward-info">
+        <h2>나의 ESG 레벨</h2>
+        <p class="reward-level">LV <span id="rewardLevel">1</span></p>
+        <p class="reward-sub">완료한 미션: <span id="rewardCount">0</span>개</p>
+      </div>
+    </div>
 
     <h3>획득한 뱃지</h3>
     <div class="badgeContainer" id="badges"></div>
 
     <h3>ESG 기여도</h3>
-<canvas id="esgChart" width="200" height="200"></canvas>
+    <canvas id="esgChart" width="200" height="200"></canvas>
 
-<div id="badgePopup" class="popup-overlay" style="display:none;">
-  <div class="popup-box">
-    <h3 id="badgeTitle">뱃지 제목</h3>
-    <p id="badgeDesc">뱃지 설명 문구</p>
-    <button id="badgeClose">닫기</button>
-  </div>
-</div>
-
+    <!-- 뱃지 팝업 -->
+    <div id="badgePopup" class="popup-overlay" style="display:none;">
+      <div class="popup-box">
+        <h3 id="badgeTitle"></h3>
+        <p id="badgeDesc"></p>
+        <button id="badgeClose">닫기</button>
+      </div>
+    </div>
 
   </main>
 
 
-  <!-- MY History -->
+
+  <!-- ================================
+          MY PAGE
+  ================================= -->
   <main id="myPage" class="page">
 
-              <h2>ESG 임팩트 요약</h2>
+    <h2>ESG 임팩트 요약</h2>
 
-      <div class="impact-box">
+    <div class="impact-box">
 
-        <div class="impact-row">
-          <div class="impact-label">🌿 절감한 컵</div>
-          <div class="impact-value" id="impCup">0</div>
-        </div>
+      <div class="impact-row">
+        <div class="impact-label">🌿 절감한 컵</div>
+        <div class="impact-value" id="impCup">0</div>
+      </div>
 
-        <div class="impact-row">
-          <div class="impact-label">🌿 절감한 플라스틱 병</div>
-          <div class="impact-value" id="impBottle">0</div>
-        </div>
+      <div class="impact-row">
+        <div class="impact-label">🌿 절감한 플라스틱 병</div>
+        <div class="impact-value" id="impBottle">0</div>
+      </div>
 
-        <div class="impact-row">
-          <div class="impact-label">🌿 절감한 빨대</div>
-          <div class="impact-value" id="impStraw">0</div>
-        </div>
+      <div class="impact-row">
+        <div class="impact-label">🌿 절감한 빨대</div>
+        <div class="impact-value" id="impStraw">0</div>
+      </div>
 
-        <div class="impact-row">
-          <div class="impact-label">🌿 절감한 종이</div>
-          <div class="impact-value" id="impPaper">0</div>
-        </div>
+      <div class="impact-row">
+        <div class="impact-label">🌿 절감한 종이</div>
+        <div class="impact-value" id="impPaper">0</div>
+      </div>
 
-        <div class="impact-row">
-          <div class="impact-label">🌍 절감한 탄소</div>
-          <div class="impact-value" id="impCO2">0</div>
-        </div>
+      <div class="impact-row">
+        <div class="impact-label">🌍 절감한 탄소</div>
+        <div class="impact-value" id="impCO2">0</div>
+      </div>
 
-        <div class="impact-row">
-          <div class="impact-label">💛 사회적 온도</div>
-          <div class="impact-value" id="impWarmth">0</div>
-        </div>
+      <div class="impact-row">
+        <div class="impact-label">💛 사회적 온도</div>
+        <div class="impact-value" id="impWarmth">0</div>
+      </div>
 
-        <div class="impact-row">
-          <div class="impact-label">💬 거버넌스 참여도</div>
-          <div class="impact-value" id="impGov">0</div>
-        </div>
+      <div class="impact-row">
+        <div class="impact-label">💬 거버넌스 참여도</div>
+        <div class="impact-value" id="impGov">0</div>
+      </div>
 
-      </div>  
+    </div>
+
     <h2>MY 히스토리</h2>
     <ul id="historyList"></ul>
   </main>
-  <!-- Ranking Page -->
-
-  
-  <!-- Guide Page -->
-<main id="guidePage" class="page">
-  <h2 class="guide-title">RE:CAMPUS 가이드</h2>
 
 
 
-  <section class="guide-section">
-    <h3>🌱 RE:CAMPUS란?</h3>
-    <p>
-      RE:CAMPUS는 동서대학교 학생들이<br>
-      일상에서 쉽게 ESG를 실천할 수 있도록 만든<br>
-      <strong>ESG 미션 플랫폼</strong>입니다.
+  <!-- ================================
+          ESG MBTI PAGE
+  ================================= -->
+  <main id="mbtiPage" class="page">
+
+    <h2 class="mbti-title">🌈 ESG MBTI 결과</h2>
+
+    <div class="mbti-card">
+      <div id="mbtiResult" class="mbti-type">MBTI</div>
+      <div id="mbtiName" class="mbti-name">유형 이름</div>
+      <div id="mbtiDesc" class="mbti-desc">설명</div>
+    </div>
+
+    <button id="mbtiRetry" class="btn-primary mbti-retry">다시 분석하기</button>
+
+    <p class="mbti-note">
+    🔍 현재 ESG 참여 비율을 기반으로 분석된 결과예요.<br>
+    환경·존중·소통 활동 비율이 달라지면 MBTI도 달라질 수 있어요!
     </p>
-  </section>
 
-  <section class="guide-section">
-    <h3>📌 ESG 미션 카테고리</h3>
-    <ul class="guide-list">
-      <li><span class="g-dot e"></span> <strong>환경(E)</strong> — 플라스틱·탄소 줄이기</li>
-      <li><span class="g-dot s"></span> <strong>존중(S)</strong> — 교우 문화 개선 & 배려 실천</li>
-      <li><span class="g-dot g"></span> <strong>소통(G)</strong> — 의견 반영·정보 공유·거버넌스 참여</li>
-    </ul>
-  </section>
+  </main>
 
-  <section class="guide-section">
-    <h3>📝 참여 방법</h3>
-    <ol class="guide-steps">
-      <li>미션 카테고리에서 원하는 미션을 선택합니다.</li>
-      <li>실천 후 클릭하여 완료 처리합니다.</li>
-      <li>경험치를 모아 <strong>레벨업 & 뱃지</strong>를 모아보세요!</li>
-    </ol>
-  </section>
 
-  <section class="guide-section">
-    <h3>🎁 혜택</h3>
-    <ul class="guide-list">
-      <li>ESG 실천 레벨 상승</li>
-      <li>카테고리별 뱃지 획득</li>
-      <li>나의 실천 히스토리 기록</li>
-      <li>공모전·포트폴리오 활용 가능</li>
-    </ul>
-  </section>
 
-  <p class="guide-bottom">작은 실천이 캠퍼스를 바꿉니다 🌿</p>
-</main>
+  <!-- ================================
+          GUIDE PAGE
+  ================================= -->
+  <main id="guidePage" class="page">
+    <h2 class="guide-title">RE:CAMPUS 가이드</h2>
 
-<main id="reportPage" class="page report-page">
-  <h2 class="report-title">
-    <span>📊 이번 주 ESG 리포트</span>
-  </h2>
+    <section class="guide-section">
+      <h3>🌱 RE:CAMPUS란?</h3>
+      <p>
+        RE:CAMPUS는 동서대학교 학생들이<br>
+        일상에서 쉽게 ESG를 실천할 수 있도록 만든<br>
+        <strong>ESG 미션 플랫폼</strong>입니다.
+      </p>
+    </section>
 
-  <!-- 활동 요약 -->
-  <section class="report-card">
-    <div class="report-header">🗓 활동 요약</div>
-    <div class="report-body">
-      <p class="report-summary" id="weeklyCount">로딩 중...</p>
+    <section class="guide-section">
+      <h3>📌 ESG 미션 카테고리</h3>
+      <ul class="guide-list">
+        <li><span class="g-dot e"></span> <strong>환경(E)</strong> — 플라스틱·탄소 줄이기</li>
+        <li><span class="g-dot s"></span> <strong>존중(S)</strong> — 교우 문화 개선 & 배려 실천</li>
+        <li><span class="g-dot g"></span> <strong>소통(G)</strong> — 의견 반영·정보 공유·거버넌스 참여</li>
+      </ul>
+    </section>
 
-      <div class="chart-wrapper">
-        <canvas id="weeklyChart"></canvas>
-        <div id="weeklyCenterText" class="center-text"></div>
+    <section class="guide-section">
+      <h3>📝 참여 방법</h3>
+      <ol class="guide-steps">
+        <li>미션 카테고리에서 원하는 미션을 선택합니다.</li>
+        <li>실천 후 클릭하여 완료 처리합니다.</li>
+        <li>경험치를 모아 <strong>레벨업 & 뱃지</strong>를 모아보세요!</li>
+      </ol>
+    </section>
+
+    <section class="guide-section">
+      <h3>🎁 혜택</h3>
+      <ul class="guide-list">
+        <li>ESG 실천 레벨 상승</li>
+        <li>카테고리별 뱃지 획득</li>
+        <li>나의 실천 히스토리 기록</li>
+        <li>공모전·포트폴리오 활용 가능</li>
+      </ul>
+    </section>
+
+    <p class="guide-bottom">작은 실천이 캠퍼스를 바꿉니다 🌿</p>
+  </main>
+
+
+
+  <!-- ================================
+          WEEKLY REPORT PAGE
+  ================================= -->
+  <main id="reportPage" class="page report-page">
+    <h2 class="report-title">
+      <span>📊 이번 주 ESG 리포트</span>
+    </h2>
+
+    <section class="report-card">
+      <div class="report-header">🗓 활동 요약</div>
+      <div class="report-body">
+        <p class="report-summary" id="weeklyCount">로딩 중...</p>
+
+        <div class="chart-wrapper">
+          <canvas id="weeklyChart"></canvas>
+          <div id="weeklyCenterText" class="center-text"></div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- 칭찬 코멘트 -->
-  <section class="report-card">
-    <div class="report-header">💬 칭찬 코멘트</div>
-    <div class="report-body">
-      <p class="report-comment" id="weeklyComment">ESG 분석 중... 🌱</p>
-    </div>
-  </section>
-</main>
+    <section class="report-card">
+      <div class="report-header">💬 칭찬 코멘트</div>
+      <div class="report-body">
+        <p class="report-comment" id="weeklyComment">ESG 분석 중... 🌱</p>
+      </div>
+    </section>
+  </main>
 
 
 
-
-  <!-- 하단 네비게이션 -->
+  <!-- ================================
+          NAVIGATION BAR
+  ================================= -->
   <nav>
     <button id="tab-home">🏠<span>홈</span></button>
     <button id="tab-reward">🎁<span>보상</span></button>
     <button id="tab-my">👤<span>MY</span></button>
     <button id="tab-report">📊<span>리포트</span></button>
+    <button id="tab-mbti">🧬<span>MBTI</span></button>
     <button id="tab-guide">ℹ️<span>가이드</span></button>
   </nav>
-
 
 
   <!-- 스크립트 로드 -->
@@ -248,20 +268,20 @@
   <div id="levelUpEffect"></div>
 
   <!-- 안내 팝업 -->
-<div id="noticePopup" class="popup-overlay">
-  <div class="popup-box">
-    <h3>🔔 안내 사항</h3>
-    <p>
-      현재 서비스는 시험적인 버전입니다.<br>
-      일부 기능이 정상적으로 작동하지 않을 수 있으며,<br>
-      <strong>PC 환경에서의 사용을 권장드립니다.</strong><br><br>
-      심사 시 양해 부탁드립니다 🙏
-    </p>
-    <button id="popupClose">확인</button>
+  <div id="noticePopup" class="popup-overlay">
+    <div class="popup-box">
+      <h3>🔔 안내 사항</h3>
+      <p>
+        현재 서비스는 시험적인 버전입니다.<br>
+        일부 기능이 정상적으로 작동하지 않을 수 있으며,<br>
+        <strong>PC 환경에서의 사용을 권장드립니다.</strong><br><br>
+        심사 시 양해 부탁드립니다 🙏
+      </p>
+      <button id="popupClose">확인</button>
+    </div>
   </div>
-</div>
 
-<div id="toast" class="toast"></div>
+  <div id="toast" class="toast"></div>
 
 </body>
 </html>
