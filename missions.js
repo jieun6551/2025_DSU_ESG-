@@ -1,4 +1,32 @@
-// 📌 ESG 미션 데이터
+// ======================================
+// 0. 뱃지 설명 데이터
+// ======================================
+const badgeInfo = {
+  green: {
+    title: "환경 리더 🌿",
+    description: "환경(E) 미션을 가장 많이 수행한 사용자에게 주어지는 뱃지입니다.",
+  },
+  yellow: {
+    title: "존중 마스터 💛",
+    description: "존중(S) 미션을 가장 많이 실천한 사용자에게 수여됩니다.",
+  },
+  blue: {
+    title: "소통 챔피언 💬",
+    description: "소통(G) 활동을 활발하게 한 사용자에게 수여됩니다.",
+  },
+  master: {
+    title: "ESG 밸런서 ⭐",
+    description: "환경·존중·소통을 균형있게 수행한 사용자만 획득할 수 있는 고급 뱃지입니다.",
+  },
+  medal: {
+    title: "레벨업 메달 🏅",
+    description: "레벨이 1 증가할 때마다 획득하는 성장 메달입니다.",
+  }
+};
+
+// ======================================
+// 1. 미션 데이터 및 임팩트
+// ======================================
 const missions = [
   { text: "텀블러 사용하기", category: "E", score: 3, effect: "일회용 컵 사용량 감소", effectValue: { cup: 1, co2: 9.9 } },
   { text: "정수대에서 물 채우기", category: "E", score: 2, effect: "플라스틱 병 사용 절감", effectValue: { bottle: 1, co2: 18 } },
@@ -23,63 +51,68 @@ let impact = JSON.parse(localStorage.getItem("impact")) || {
   governance: 0
 };
 
+// ======================================
+// 2. 공용 상태 / 기본값
+// ======================================
+const today = new Date().toISOString().split("T")[0];
+const categoryIcon = { E: "🌿", S: "💛", G: "💬" };
 
-function showToast(message, type="E", emoji="🌱") {
+let pointsRaw = localStorage.getItem("points");
+let points = parseInt(pointsRaw ?? "0", 10);
+if (isNaN(points)) points = 0;
+
+let history = JSON.parse(localStorage.getItem("history")) || [];
+let todayMissionIndex = Number(localStorage.getItem("todayIndex"));
+let todayDate = localStorage.getItem("todayDate");
+
+// ======================================
+// 3. 토스트 메시지
+// ======================================
+function showToast(message, type = "E", emoji = "🌱") {
   const toast = document.getElementById("toast");
+  if (!toast) {
+    // 토스트 엘리먼트 없으면 그냥 alert로 대체
+    alert(message);
+    return;
+  }
 
-  // 색상 클래스 초기화
-  toast.className = "toast";
-  toast.classList.add(type);
-
-  // 이모지 + 메시지 UI
+  toast.className = "toast";      // 초기화
+  toast.classList.add(type);      // 카테고리별 색 부여
   toast.innerHTML = `<span class="emoji">${emoji}</span> ${message}`;
-
-  // 등장 애니메이션
   toast.classList.add("show");
 
-  // 자동 사라짐
   clearTimeout(toast._timer);
   toast._timer = setTimeout(() => {
     toast.classList.remove("show");
   }, 2200);
 }
 
-
-
-
-
-// 저장 불러오기
-let points = parseInt(localStorage.getItem("points"));
-if (isNaN(points)) points = 0;
-let history = JSON.parse(localStorage.getItem("history")) || [];
-let todayMissionIndex = Number(localStorage.getItem("todayIndex"));
-let todayDate = localStorage.getItem("todayDate");
-const today = new Date().toISOString().split('T')[0];
-
-const categoryIcon = { E: "🌿", S: "💛", G: "💬" };
-
-// ---------------------------------------------------------
-// 레벨/경험치
+// ======================================
+// 4. 레벨 / 경험치
+// ======================================
 function updateLevel() {
-const level = isNaN(points) ? 1 : Math.floor(points / 10) + 1;
-const exp = isNaN(points) ? 0 : points % 10;
+  if (!Number.isFinite(points)) points = 0;
 
+  const level = Math.floor(points / 10) + 1;
+  const exp = points % 10;
+  const bar = document.getElementById("expBar");
+  const levelSpan = document.getElementById("level");
+  const leftText = document.getElementById("expLeftText");
 
-  const left = 10 - exp;  // ⭐ 다음 레벨까지 남은 점수
+  if (bar) bar.style.width = (exp * 10) + "%";
+  if (levelSpan) levelSpan.innerText = level;
 
-  document.getElementById("expBar").style.width = (exp * 10) + "%";
-  document.getElementById("level").innerText = level;
-
-  // ⭐ 남은 경험치 텍스트 표시
-  document.getElementById("expLeftText").innerText =
-    left === 0
+  if (leftText) {
+    const left = 10 - exp;
+    leftText.innerText = left === 0
       ? "레벨업 준비 완료! ✨"
       : `다음 레벨까지 ${left}점 남음`;
+  }
 }
 
-
-// ---------------------------------------------------------
-// 마스코트
+// ======================================
+// 5. 마스코트
+// ======================================
 const messages = [
   "환경은 작은 실천부터! 🌱",
   "멋지다! 계속 가보자! ✨",
@@ -89,11 +122,12 @@ const messages = [
 function mascotReaction(type) {
   const m = document.getElementById("mascot");
   const msg = document.getElementById("mascotMsg");
+  if (!m || !msg) return;
 
   let duration = 3000;
   msg.innerText = messages[Math.floor(Math.random() * messages.length)];
 
-  if(type === "levelup") {
+  if (type === "levelup") {
     m.innerText = "🌱🎉(≧▽≦)🎉🌱";
     duration = 3800;
   } else {
@@ -110,10 +144,13 @@ function mascotReaction(type) {
   }, duration);
 }
 
-// ---------------------------------------------------------
-// 폭죽
+// ======================================
+// 6. 레벨업 폭죽
+// ======================================
 function fireLevelUpEffect() {
   const effect = document.getElementById("levelUpEffect");
+  if (!effect) return;
+
   effect.innerHTML = "";
   for (let i = 0; i < 40; i++) {
     const c = document.createElement("div");
@@ -125,56 +162,69 @@ function fireLevelUpEffect() {
   setTimeout(() => effect.innerHTML = "", 1200);
 }
 
-// ---------------------------------------------------------
-// 오늘 미션 랜덤
+// ======================================
+// 7. 오늘의 미션
+// ======================================
 function setRandomMission() {
-  if (todayDate !== today || todayMissionIndex == null) {
+  if (todayDate !== today || todayMissionIndex == null || isNaN(todayMissionIndex)) {
     todayMissionIndex = Math.floor(Math.random() * missions.length);
     todayDate = today;
     localStorage.setItem("todayIndex", todayMissionIndex);
     localStorage.setItem("todayDate", todayDate);
   }
-  document.getElementById("randomMission").innerText = missions[todayMissionIndex].text;
+  const el = document.getElementById("randomMission");
+  if (el) el.innerText = missions[todayMissionIndex].text;
 }
 
-// ---------------------------------------------------------
-function completeMission(mission) {
+// ======================================
+// 8. 미션 완료
+// ======================================
+function completeMission(missionOrIndex) {
+  // 방어코드: 숫자가 들어오면 인덱스로 취급
+  let mission = missionOrIndex;
+  if (typeof mission === "number") {
+    mission = missions[mission];
+  }
+  if (!mission) return;
+
   const prevLevel = Math.floor(points / 10) + 1;
 
+  // 점수 증가
   points += mission.score;
+  if (!Number.isFinite(points)) points = 0;
 
-  // 카테고리 색 토스트
-  showToast(`+${mission.score}점! ${mission.text} 완료`,
-          mission.category,
-          mission.category === "E" ? "🌿" :
-          mission.category === "S" ? "💛" : "💬"
-);
+  // 토스트 (카테고리별 색상/이모지)
+  const emoji =
+    mission.category === "E" ? "🌿" :
+    mission.category === "S" ? "💛" : "💬";
 
+  showToast(`+${mission.score}점! ${mission.text} 완료`, mission.category, emoji);
 
   const newLevel = Math.floor(points / 10) + 1;
   if (newLevel > prevLevel) {
     mascotReaction("levelup");
     fireLevelUpEffect();
-
-    // 레벨업 전용 색
-    showToast(`레벨업! ${prevLevel} → ${newLevel} 🎉`, "levelup", "⭐");
+    showToast(`레벨업! LV.${prevLevel} → LV.${newLevel} 🎉`, "levelup", "⭐");
+  } else {
     mascotReaction("success");
   }
 
+  // 히스토리 기록
   history.push({
     text: mission.text,
     category: mission.category,
     date: today
   });
 
-  // ⭐ ESG 효과 누적
-for (const key in mission.effectValue) {
-  impact[key] += mission.effectValue[key];
-}
+  // ESG 임팩트 누적
+  if (mission.effectValue) {
+    for (const key in mission.effectValue) {
+      impact[key] = (impact[key] || 0) + mission.effectValue[key];
+    }
+    localStorage.setItem("impact", JSON.stringify(impact));
+  }
 
-localStorage.setItem("impact", JSON.stringify(impact));
-
-
+  // 저장
   localStorage.setItem("points", points);
   localStorage.setItem("history", JSON.stringify(history));
 
@@ -182,19 +232,22 @@ localStorage.setItem("impact", JSON.stringify(impact));
   updateTodayProgress();
 }
 
-
-
-// ⭐ 오늘 서로 다른 미션 3개가 목표!
+// ======================================
+// 9. 오늘의 미션 완료 (3개 다른 미션 목표)
+// ======================================
 function completeTodayMission() {
   const doneToday = history.filter(h => h.date === today);
   const uniqueCount = new Set(doneToday.map(h => h.text)).size;
 
   if (uniqueCount >= 3) {
-    showToast("오늘 목표 이미 달성 완료! 🎉");
+    showToast("오늘 목표 이미 달성 완료! 🎉", "master", "⭐");
     return;
   }
 
-  completeMission(todayMissionIndex);
+  const mission = missions[todayMissionIndex];
+  if (!mission) return;
+
+  completeMission(mission);
   setRandomMission();
 
   const afterCount = new Set(
@@ -202,21 +255,22 @@ function completeTodayMission() {
   ).size;
 
   if (afterCount >= 3) {
-    showToast("🌟 ESG 목표 달성! 완벽합니다! 🌱✨");
+    showToast("🌟 ESG 목표 달성! 완벽합니다! 🌱✨", "master", "⭐");
   }
 }
 
-// ---------------------------------------------------------
-// 미션 리스트
-function loadMissions(filter="ALL") {
+// ======================================
+// 10. 미션 리스트 로딩
+// ======================================
+function loadMissions(filter = "ALL") {
   const list = document.getElementById("missionList");
+  if (!list) return;
   list.innerHTML = "";
 
   missions
     .filter(m => filter === "ALL" || m.category === filter)
-    .forEach((m, i) => {
+    .forEach((m) => {
       const li = document.createElement("li");
-
       li.innerHTML = `
         <div class="icon">${categoryIcon[m.category]}</div>
         <div style="display:flex; flex-direction:column;">
@@ -224,27 +278,29 @@ function loadMissions(filter="ALL") {
           <span style="font-size:12px; color:#666;">+${m.score}점 • ${m.effect}</span>
         </div>
       `;
-
       li.addEventListener("click", () => completeMission(m));
       list.appendChild(li);
     });
 }
 
-
-
-// ---------------------------------------------------------
-// UI
+// ======================================
+// 11. UI 업데이트
+// ======================================
 function updateTodayProgress() {
   const doneToday = history.filter(h => h.date === today);
   const uniqueCount = new Set(doneToday.map(h => h.text)).size;
 
-  document.getElementById("todayProgress")
-    .innerText = `오늘 진행도: ${uniqueCount}/3${uniqueCount>=3 ? " ⭐" : ""}`;
+  const el = document.getElementById("todayProgress");
+  if (!el) return;
+
+  el.innerText = `오늘 진행도: ${uniqueCount}/3${uniqueCount >= 3 ? " ⭐" : ""}`;
 }
 
 function updateHistoryPage() {
   const list = document.getElementById("historyList");
+  if (!list) return;
   list.innerHTML = "";
+
   history.slice().reverse().forEach(h => {
     const li = document.createElement("li");
     li.innerText = `${h.date} - ${h.text}`;
@@ -253,31 +309,36 @@ function updateHistoryPage() {
 }
 
 function updateRewardPage() {
-  const level = isNaN(points) ? 1 : Math.floor(points / 10) + 1;
-  const exp = isNaN(points) ? 0 : points % 10;
+  const level = Math.floor(points / 10) + 1;
 
-  document.getElementById("rewardLevel").innerText = level;
-  document.getElementById("rewardCount").innerText = history.length;
-  document.getElementById("impCup").innerText = impact.cup;
-  document.getElementById("impBottle").innerText = impact.bottle;
-  document.getElementById("impStraw").innerText = impact.straw;
-  document.getElementById("impPaper").innerText = impact.paper.toFixed(1);
-  document.getElementById("impCO2").innerText = impact.co2.toFixed(1);
-  document.getElementById("impWarmth").innerText = impact.warmth;
-  document.getElementById("impGov").innerText = impact.governance;
+  const levelEl = document.getElementById("rewardLevel");
+  const countEl = document.getElementById("rewardCount");
+  if (levelEl) levelEl.innerText = level;
+  if (countEl) countEl.innerText = history.length;
 
+  // 임팩트 표 업데이트 (있을 때만)
+  const setText = (id, value) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerText = value;
+  };
 
+  setText("impCup", impact.cup);
+  setText("impBottle", impact.bottle);
+  setText("impStraw", impact.straw);
+  setText("impPaper", impact.paper.toFixed ? impact.paper.toFixed(1) : impact.paper);
+  setText("impCO2", impact.co2.toFixed ? impact.co2.toFixed(1) : impact.co2);
+  setText("impWarmth", impact.warmth);
+  setText("impGov", impact.governance);
 
   const badgeArea = document.getElementById("badges");
+  if (!badgeArea) return;
   badgeArea.innerHTML = "";
 
-  // 카운트
-  const count = cat =>
-    history.filter(h => h.category === cat).length;
-
+  const count = cat => history.filter(h => h.category === cat).length;
   const e = count("E"), s = count("S"), g = count("G");
 
-  // 대표 뱃지 (1개)
+  // 대표 뱃지
   if (e + s + g > 0) {
     if (e > s && e > g) addBadge("🌿", "green");
     else if (s > e && s > g) addBadge("💛", "yellow");
@@ -285,30 +346,33 @@ function updateRewardPage() {
     else addBadge("⭐", "master");
   }
 
-  // 레벨업 메달 (여러 개)
+  // 레벨 메달 한 개 (현재 레벨 표시)
   addBadge(`🏅 LV${level}`, "medal");
 
   function addBadge(icon, type) {
     const div = document.createElement("div");
     div.className = `badge ${type}`;
     div.innerText = icon;
+    div.addEventListener("click", () => showBadgePopup(type));
     badgeArea.appendChild(div);
   }
 }
 
+// ======================================
+// 12. 차트 (전체 누적)
+// ======================================
+let esgChart = null;
 
-// ---------------------------------------------------------
-// ---------------------------------------------------------
-// 차트 (전체 누적 기준)
-// ---------------------------------------------------------
-let esgChart;
 function updateESGChart() {
-  const ctx = document.getElementById("esgChart").getContext("2d");
+  const canvas = document.getElementById("esgChart");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
 
   const countByCategory = cat =>
     history.filter(h => h.category === cat).length;
 
   if (esgChart) esgChart.destroy();
+
   esgChart = new Chart(ctx, {
     type: "doughnut",
     data: {
@@ -330,8 +394,9 @@ function updateESGChart() {
   });
 }
 
-
-// ---------------------------------------------------------
+// ======================================
+// 13. 공통 업데이트
+// ======================================
 function updatePages() {
   updateLevel();
   updateHistoryPage();
@@ -340,46 +405,55 @@ function updatePages() {
   updateESGChart();
 }
 
-// ---------------------------------------------------------
+// ======================================
+// 14. 탭 / 필터 초기화
+// ======================================
 function showPage(id) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+  const tgt = document.getElementById(id);
+  if (tgt) tgt.classList.add("active");
   updatePages();
 }
 
 function initFilterButtons() {
   [["all","ALL"],["e","E"],["s","S"],["g","G"]]
-    .forEach(([id,cat])=>{
-      document.getElementById(`btn-${id}`)
-        ?.addEventListener("click",()=>{
-          loadMissions(cat);
-          setActiveFilter(`btn-${id}`);
-        });
+    .forEach(([id,cat]) => {
+      const btn = document.getElementById(`btn-${id}`);
+      if (!btn) return;
+      btn.addEventListener("click", () => {
+        loadMissions(cat);
+        setActiveFilter(`btn-${id}`);
+      });
     });
 
-  document.getElementById("btn-random")
-    ?.addEventListener("click", completeTodayMission);
+  const randomBtn = document.getElementById("btn-random");
+  if (randomBtn) randomBtn.addEventListener("click", completeTodayMission);
 }
 
 function initNavButtons() {
-  [
+  const mapping = [
     ["home","homePage"],
     ["reward","rewardPage"],
     ["my","myPage"],
-    ["guide","guidePage"]
-  ].forEach(([btn, page])=> {
-    document.getElementById(`tab-${btn}`)
-      .addEventListener("click", () => showPage(page));
+    ["guide","guidePage"]   // guidePage 없으면 자동 무시됨
+  ];
+  mapping.forEach(([btn, page]) => {
+    const el = document.getElementById(`tab-${btn}`);
+    const pg = document.getElementById(page);
+    if (!el || !pg) return;
+    el.addEventListener("click", () => showPage(page));
   });
 }
 
-
 function setActiveFilter(id) {
   document.querySelectorAll(".tab button").forEach(btn => btn.classList.remove("active"));
-  document.getElementById(id)?.classList.add("active");
+  const btn = document.getElementById(id);
+  if (btn) btn.classList.add("active");
 }
 
-// ---------------------------------------------------------
+// ======================================
+// 15. 초기 실행
+// ======================================
 function init() {
   initNavButtons();
   initFilterButtons();
@@ -392,9 +466,13 @@ function init() {
 
 init();
 
+// ======================================
+// 16. 안내 팝업
+// ======================================
 window.addEventListener("load", () => {
   const popup = document.getElementById("noticePopup");
   const closeBtn = document.getElementById("popupClose");
+  if (!popup || !closeBtn) return;
 
   if (!localStorage.getItem("popupSeen")) {
     popup.style.display = "flex";
@@ -405,3 +483,27 @@ window.addEventListener("load", () => {
     localStorage.setItem("popupSeen", "true");
   });
 });
+
+// ======================================
+// 17. 뱃지 팝업
+// ======================================
+function showBadgePopup(type) {
+  const info = badgeInfo[type];
+  const popup = document.getElementById("badgePopup");
+  const title = document.getElementById("badgeTitle");
+  const desc = document.getElementById("badgeDesc");
+
+  if (!info || !popup || !title || !desc) return;
+
+  title.innerText = info.title;
+  desc.innerText = info.description;
+  popup.style.display = "flex";
+}
+
+const badgeCloseBtn = document.getElementById("badgeClose");
+if (badgeCloseBtn) {
+  badgeCloseBtn.addEventListener("click", () => {
+    const popup = document.getElementById("badgePopup");
+    if (popup) popup.style.display = "none";
+  });
+}
