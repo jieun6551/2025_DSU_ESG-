@@ -1,3 +1,29 @@
+const loadingTexts = [
+  "ESG 데이터를 불러오는 중...",
+  "미션 보상을 계산하고 있어요... 🌱",
+  "환경·존중·소통 활동을 로딩 중...",
+  "캠퍼스를 깨끗하게 정리 중... ✨"
+];
+
+let idx = 0;
+const loadingText = document.getElementById("loadingText");
+const loadingScreen = document.getElementById("loadingScreen");
+
+setInterval(() => {
+  idx = (idx + 1) % loadingTexts.length;
+  loadingText.innerText = loadingTexts[idx];
+}, 1200);
+
+// 모든 초기화 끝나면 자동으로 숨기기
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    loadingScreen.style.opacity = "0";
+    setTimeout(() => loadingScreen.style.display = "none", 500);
+  }, 2000);
+});
+
+
+
 // ======================================
 // 0. 뱃지 설명 데이터
 // ======================================
