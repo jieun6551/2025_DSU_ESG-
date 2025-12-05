@@ -1336,3 +1336,91 @@ html, body {
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(8px); }
 }
+
+
+/* ================================
+   🌿 ESG MBTI 카드: 심플 & 고급 버전
+================================= */
+
+#mbtiPage {
+  text-align: center;
+  padding: 20px;
+}
+
+.mbti-title {
+  font-size: 26px;
+  font-weight: 900;
+  margin-bottom: 26px;
+  color: #2A7C4F;
+}
+
+/* 메인 카드 */
+.mbti-card {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 28px auto;
+  padding: 36px 24px;
+
+  background: #ffffff;
+  border-radius: 22px;
+
+  border: 1.5px solid #e4e4e4;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+
+  color: #222;
+}
+
+/* MBTI TYPE */
+.mbti-type {
+  font-size: 36px;
+  font-weight: 800;
+  color: #2a7c4f;   /* 초록 포인트 */
+  margin-bottom: 10px;
+}
+
+/* MBTI NAME */
+.mbti-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #444;
+  margin-bottom: 14px;
+}
+
+/* 설명 */
+.mbti-desc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* 다시 분석하기 버튼 */
+.mbti-retry {
+  display: inline-block;
+  width: 300px;
+  padding: 13px 32px;
+  font-size: 17px;
+  border-radius: 14px;
+
+  background: #2a7c4f;
+  color: white;
+  font-weight: 700;
+  border: none;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  cursor: pointer;
+  margin-top: 10px;
+
+  transition: 0.15s ease;
+}
+
+.mbti-retry:hover {
+  background: #256b44;
+  transform: translateY(-2px);
+}
+
+.mbti-note {
+  font-size: 14px;
+  color: #9e9e9e;
+  margin-top: 30px;
+  line-height: 1.5;
+}
