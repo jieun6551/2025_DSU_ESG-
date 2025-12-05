@@ -324,15 +324,27 @@ function updateTodayProgress() {
 
 function updateHistoryPage() {
   const list = document.getElementById("historyList");
-  if (!list) return;
   list.innerHTML = "";
 
   history.slice().reverse().forEach(h => {
     const li = document.createElement("li");
-    li.innerText = `${h.date} - ${h.text}`;
+
+    const icon = categoryIcon[h.category] || "❓";
+
+    li.innerHTML = `
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:22px;">${icon}</span>
+        <div style="display:flex; flex-direction:column;">
+          <span style="font-weight:600;">${h.text}</span>
+          <span style="font-size:12px; color:#666;">${h.date}</span>
+        </div>
+      </div>
+    `;
+
     list.appendChild(li);
   });
 }
+
 
 function updateRewardPage() {
   const level = Math.floor(points / 10) + 1;
