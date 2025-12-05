@@ -1235,3 +1235,104 @@ html, body {
   0% { width: 0%; }
   100% { width: 100%; }
 }
+
+/* ================================
+   🌿 REPORT PAGE 고급 스타일
+================================ */
+
+.report-page {
+  padding: 18px;
+  animation: fadeIn .4s ease;
+}
+
+/* 제목 */
+.report-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #2A7C4F;
+}
+
+/* 카드 기본 */
+.report-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 0;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  overflow: hidden;
+  animation: fadeInUp .4s ease;
+}
+
+.report-header {
+  background: linear-gradient(135deg, #e6f6ec, #c9eed9);
+  padding: 12px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1d6a3a;
+  border-bottom: 1px solid #d8eadf;
+}
+
+.report-body {
+  padding: 18px 20px;
+}
+
+.report-summary {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #2A7C4F;
+}
+
+/* 칭찬 코멘트 */
+.report-comment {
+  font-size: 15px;
+  font-weight: 600;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* ====================================
+   📊 차트 (정사각형 유지 + 숫자 중앙 정렬)
+==================================== */
+
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 260px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 도넛 차트 크기 고정 + 찌그러짐 방지 */
+#weeklyChart {
+  width: 260px !important;
+  height: 260px !important;
+  display: block;
+}
+
+/* 중앙 숫자 텍스트 */
+.center-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -90%); /* ← 여기만 수정! */
+  font-weight: 800;
+  font-size: 24px;
+  color: #2A7C4F;
+  pointer-events: none;
+  text-align: center;
+}
+
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+}
