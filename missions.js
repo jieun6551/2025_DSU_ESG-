@@ -441,7 +441,12 @@ function updatePages() {
   updateRewardPage();
   updateTodayProgress();
   updateESGChart();
+
+  // 임시로 주간 리포트 비활성화!
+  // updateWeeklyReport();
 }
+
+
 
 // ======================================
 // 14. 탭 / 필터 초기화
@@ -450,8 +455,17 @@ function showPage(id) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   const tgt = document.getElementById(id);
   if (tgt) tgt.classList.add("active");
+
   updatePages();
+
+  // ⭐ 리포트 페이지가 "보인 뒤"에 차트를 다시 그리기
+  if (id === "reportPage") {
+    setTimeout(() => {
+      updateWeeklyReport();
+    }, 50); // DOM 리렌더 후 실행
+  }
 }
+
 
 function initFilterButtons() {
   [["all","ALL"],["e","E"],["s","S"],["g","G"]]
@@ -473,15 +487,25 @@ function initNavButtons() {
     ["home","homePage"],
     ["reward","rewardPage"],
     ["my","myPage"],
-    ["guide","guidePage"]   // guidePage 없으면 자동 무시됨
+    ["report","reportPage"],
+    ["guide","guidePage"]
   ];
+
   mapping.forEach(([btn, page]) => {
     const el = document.getElementById(`tab-${btn}`);
-    const pg = document.getElementById(page);
-    if (!el || !pg) return;
-    el.addEventListener("click", () => showPage(page));
+    if (!el) return;
+
+    el.addEventListener("click", () => {
+      showPage(page);
+
+      // 리포트 페이지일 때만 업데이트 실행
+      if (page === "reportPage") {
+        updateWeeklyReport();
+      }
+    });
   });
 }
+
 
 function setActiveFilter(id) {
   document.querySelectorAll(".tab button").forEach(btn => btn.classList.remove("active"));
@@ -545,3 +569,95 @@ if (badgeCloseBtn) {
     if (popup) popup.style.display = "none";
   });
 }
+
+function getWeeklyData() {
+  const now = new Date();
+  const weekAgo = new Date();
+  weekAgo.setDate(now.getDate() - 7);
+
+  const todayStr = now.toISOString().split("T")[0];
+  const weekAgoStr = weekAgo.toISOString().split("T")[0];
+
+  // ✅ 날짜 + 카테고리(E/S/G) 둘 다 필터링
+  const weekly = history.filter(h =>
+    h.date >= weekAgoStr &&
+    h.date <= todayStr &&
+    (h.category === "E" || h.category === "S" || h.category === "G")
+  );
+
+  const countByCategory = cat =>
+    weekly.filter(h => h.category === cat).length;
+
+  const E = countByCategory("E");
+  const S = countByCategory("S");
+  const G = countByCategory("G");
+
+  // ✅ total을 그냥 E+S+G 합으로
+  const total = E + S + G;
+
+  return { total, E, S, G };
+}
+
+
+
+
+// 주간 코멘트 자동 생성
+function makeWeeklyComment(data) {
+  if (data.total === 0) return "이번 주 활동이 없어요! 내일부터 함께 시작해볼까요? 🌱";
+
+  const maxCat = Object.entries({E:data.E, S:data.S, G:data.G})
+    .sort((a,b)=>b[1]-a[1])[0][0];
+
+  const text = {
+    E: "환경 실천이 가장 뛰어났어요! 지속가능한 캠퍼스에 기여 중! 🌿",
+    S: "사려 깊은 행동이 많았어요! 함께하는 캠퍼스 문화를 만들고 있어요 💛",
+    G: "학교 소통 참여도가 매우 높아요! 학생 사회에 긍정적 영향 💬",
+  };
+
+  return text[maxCat];
+}
+
+
+function updateWeeklyReport() {
+  setTimeout(() => {
+    const data = getWeeklyData();
+
+    document.getElementById("weeklyCount").innerText =
+      `이번 주 총 ${data.total}개의 ESG 활동을 수행했어요!`;
+
+    document.getElementById("weeklyComment").innerText =
+      makeWeeklyComment(data);
+
+    const chartEl = document.getElementById("weeklyChart");
+    if (!chartEl) return;
+
+    const ctx = chartEl.getContext("2d");
+
+    if (window.weeklyChart && typeof window.weeklyChart.destroy === "function") {
+      window.weeklyChart.destroy();
+    }
+
+    window.weeklyChart = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: ["환경", "존중", "소통"],
+        datasets: [{
+          data: [data.E, data.S, data.G],
+          backgroundColor: ["#4caf50", "#ffca28", "#64b5f6"]
+        }]
+      },
+      options: {
+        plugins: { legend: { position: "bottom" } },
+        cutout: "60%"   // 중앙 텍스트 보이게 하는 옵션
+      }
+    });
+
+    // ⭐ 차트 중앙 숫자 표시
+    const centerText = document.getElementById("weeklyCenterText");
+    if (centerText) {
+      centerText.innerText = data.total > 0 ? `${data.total}개` : "0개";
+    }
+
+  }, 50); // ← DOM 렌더 후 실행됨 (핵심)
+}
+
